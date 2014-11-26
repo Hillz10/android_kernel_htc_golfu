@@ -160,12 +160,12 @@ extern unsigned int get_tamper_sf(void);
 #ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_SWEEP2WAKE
 
 int s2w_switch = 1;
-int dt2w_switch = 0;
+int dt2w_switch = 1;
 int pocket_detect = 1;
 int s2w_wakestat = 0;
 cputime64_t dt2w_time[2] = {0, 0}; 
-#define DT2W_TIMEOUT_MAX 275 
-#define DT2W_TIMEOUT_MIN 150
+#define DT2W_TIMEOUT_MAX 300 
+#define DT2W_TIMEOUT_MIN 50
 bool scr_suspended = false, exec_count = true;
 bool scr_on_touch = false, barrier[2] = {false, false};
 static struct input_dev * sweep2wake_pwrdev;
@@ -2299,8 +2299,8 @@ static void synaptics_ts_finger_func(struct synaptics_ts_data *ts)
 
 #ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_SWEEP2WAKE
 				//dt2w
-				if ((((ts->finger_count > 0)?1:0) == 0) && (scr_suspended == true) && (dt2w_switch == 1) &&
-						(finger_data[0][1] > 1400)) { 
+				if ((((ts->finger_count > 0)?1:0) == 0) && (scr_suspended == true) && (dt2w_switch == 1)) {
+						//&& (finger_data[0][1] > 1400)) { 
 					dt_trigger_time = ktime_to_ms(ktime_get());
 					printk(KERN_INFO "[dt2wake]: %d=> Y:%d\n", i + 1,  finger_data[0][1]);
 					dt2w_func(dt_trigger_time);
